@@ -5,6 +5,7 @@ const app = express();
 
 const userRoutes = require("./routes/userRoutes");
 const saleRoutes = require("./routes/saleRoutes");
+const payoutRoutes = require("./routes/payoutRoutes");
 
 // Middleware
 app.use(cors());
@@ -13,6 +14,7 @@ app.use(express.json());
 // Routes
 app.use("/api/users", userRoutes);
 app.use("/api/sales", saleRoutes);
+app.use("/api/payouts", payoutRoutes);
 // Test Route
 app.get("/", (req, res) => {
   res.status(200).json({
