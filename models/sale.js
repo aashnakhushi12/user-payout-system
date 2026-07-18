@@ -38,6 +38,12 @@ const saleSchema = new mongoose.Schema(
       min: 0,
     },
 
+    finalPayoutAmount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+
     reconciledAt: {
       type: Date,
       default: null,
