@@ -29,6 +29,12 @@ const withdrawalSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+
+    failureReason: {
+      type: String,
+      default: "",
+      trim: true,
+    },
   },
   {
     timestamps: true,
