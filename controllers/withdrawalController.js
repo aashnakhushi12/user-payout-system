@@ -5,6 +5,12 @@ const User = require("../models/User");
 const requestWithdrawal = async (req, res) => {
   try {
     const { userId, amount } = req.body;
+    if (!userId || !amount) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID and amount are required.",
+      });
+    }
 
     const user = await User.findById(userId);
 

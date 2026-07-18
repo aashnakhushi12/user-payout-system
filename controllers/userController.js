@@ -35,9 +35,11 @@ const createUser = async (req, res) => {
       data: user,
     });
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Internal Server Error",
     });
   }
 };
@@ -53,9 +55,10 @@ const getAllUsers = async (req, res) => {
       data: users,
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Internal Server Error",
     });
   }
 };
@@ -77,9 +80,10 @@ const getUserById = async (req, res) => {
       data: user,
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Internal Server Error",
     });
   }
 };
@@ -114,9 +118,10 @@ const updateUser = async (req, res) => {
       data: updatedUser,
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Internal Server Error",
     });
   }
 };
@@ -138,9 +143,10 @@ const deleteUser = async (req, res) => {
       message: "User deleted successfully.",
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Internal Server Error",
     });
   }
 };

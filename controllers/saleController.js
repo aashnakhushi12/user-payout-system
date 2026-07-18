@@ -7,6 +7,13 @@ const createSale = async (req, res) => {
   try {
     const { user, orderId, amount } = req.body;
 
+    if (!user || !orderId || !amount) {
+      return res.status(400).json({
+        success: false,
+        message: "User, Order ID and Amount are required.",
+      });
+    }
+
     // Check if user exists
     const existingUser = await User.findById(user);
 
