@@ -1,9 +1,19 @@
 const express = require("express");
 const router = express.Router();
 
-const { advancePayout } = require("../controllers/payoutController");
+const {
+  advancePayout,
+  retryFailedPayout,
+  simulateFailedPayout,
+} = require("../controllers/payoutController");
 
-// Advance Payout
+// Advance payout
 router.post("/advance/:saleId", advancePayout);
+
+// Retry failed payout
+router.put("/retry/:payoutId", retryFailedPayout);
+
+// Simulate failed payout
+router.post("/simulate-failure", simulateFailedPayout);
 
 module.exports = router;

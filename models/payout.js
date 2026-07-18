@@ -37,6 +37,12 @@ const payoutSchema = new mongoose.Schema(
       trim: true,
       default: "",
     },
+
+    failureReason: {
+      type: String,
+      default: "",
+      trim: true,
+    },
   },
   {
     timestamps: true,
