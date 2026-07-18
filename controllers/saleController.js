@@ -126,7 +126,6 @@ const reconcileSale = async (req, res) => {
         message: "Sale has already been reconciled.",
       });
     }
-
     // If approved, calculate remaining 90%
     if (status === "APPROVED") {
       const finalAmount = sale.amount - sale.advanceAmount;
@@ -147,6 +146,28 @@ const reconcileSale = async (req, res) => {
       });
 
       sale.finalPayoutAmount = finalAmount;
+    }
+
+    // If rejected, adjust the advance payout
+    else if (status === "REJECTED") {
+      if (sale.advancePaid) {
+        await Payout.create({
+          user: sale.user,
+          sale: sale._id,
+          type: "ADJUSTMENT",
+          amount: sale.advanceAmount,
+          status: "SUCCESS",
+          remarks: "Advance Adjustment (Rejected Sale)",
+        });
+
+        await User.findByIdAndUpdate(sale.user, {
+          $inc: {
+            walletBalance: -sale.advanceAmount,
+          },
+        });
+
+        sale.finalPayoutAmount = -sale.advanceAmount;
+      }
     }
 
     sale.status = status;
