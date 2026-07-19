@@ -102,16 +102,18 @@ Functions implemented:
 - View Sale by ID
 - Approve Sale
 - Reject Sale
+- Reconcile Sale
 
 ### Payout Module
 
-The Payout module manages payout transactions.
+The Payout module manages payout transactions including advance payouts, final payouts, adjustment payouts and failed payout recovery.
 
 Functions implemented:
 
 - Process Advance Payout
 - Process Final Payout
 - Process Adjustment Payout
+- Simulate Failed Payout
 - Retry Failed Payout
 
 ### Withdrawal Module
@@ -214,6 +216,40 @@ Update User Wallet
 MongoDB
 ```
 
+### Final Payout
+
+```text
+Client
+
+↓
+
+Payout Route
+
+↓
+
+Payout Controller
+
+↓
+
+Validate Sale Approval
+
+↓
+
+Calculate Final Payout Amount
+
+↓
+
+Create Final Payout
+
+↓
+
+Update User Wallet
+
+↓
+
+MongoDB
+```
+
 ### Withdrawal
 
 ```text
@@ -255,6 +291,7 @@ During development, I implemented the following business rules:
 - If a sale is rejected, the advance amount is recovered through an adjustment payout.
 - Duplicate Order IDs are not allowed.
 - A sale can be reconciled only once.
+- Duplicate advance and final payouts are not allowed.
 - Users cannot withdraw more than their available wallet balance.
 - Withdrawal is allowed only once every 24 hours.
 - Failed payouts can be retried successfully.
@@ -270,10 +307,36 @@ The application stores data in four MongoDB collections:
 - Payouts
 - Withdrawals
 
+The Payout collection stores different payout types:
+
+- Advance payout
+- Final payout
+- Adjustment payout
+
+Payout status is maintained to track successful and failed transactions.
+
 These collections are connected using MongoDB ObjectId references to maintain relationships between users, sales and payouts.
+
+---
+
+## Validations
+
+The following validations are implemented:
+
+- Duplicate Order ID validation
+- User existence validation
+- Sale existence validation
+- Duplicate advance payout validation
+- Duplicate final payout validation
+- Duplicate sale reconciliation validation
+- Wallet balance validation
+- 24-hour withdrawal validation
+- Failed payout retry validation
 
 ---
 
 ## Conclusion
 
-While developing this project, I focused on keeping the code simple, organized and easy to maintain. Separating the project into routes, controllers and models helped me implement the required business logic in a clean way. This structure also makes it easier to understand the project and add new features in the future.
+While developing this project, I focused on keeping the code simple, organized and easy to maintain. Separating the project into routes, controllers and models helped me implement the required business logic in a clean way.
+
+This structure also makes it easier to understand the project and add new features in the future.

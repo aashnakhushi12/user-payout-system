@@ -140,7 +140,10 @@ PUT /sales/reconcile/:saleId
 
 **Description**
 
-Approves or rejects a sale and processes the corresponding payout.
+Approves or rejects a sale.
+
+- If the sale is approved, the final payout is processed.
+- If the sale is rejected, the advance payout amount is recovered through an adjustment payout.
 
 ---
 
@@ -156,7 +159,7 @@ POST /payouts/advance/:saleId
 
 **Description**
 
-Processes the advance payout of 10% for a sale.
+Processes the advance payout of 10% of the sale amount and updates the user's wallet.
 
 ---
 
@@ -170,7 +173,7 @@ POST /payouts/simulate-failure
 
 **Description**
 
-Creates a failed payout for testing the retry functionality.
+Creates a failed payout transaction for testing the retry functionality.
 
 ---
 
@@ -184,7 +187,7 @@ PUT /payouts/retry/:payoutId
 
 **Description**
 
-Retries a previously failed payout.
+Retries a failed payout and updates the payout status after successful processing.
 
 ---
 
@@ -232,8 +235,12 @@ Error responses follow this format:
 The APIs include the following validations:
 
 - Duplicate Order ID is not allowed.
-- Advance payout can be processed only once.
-- Final payout cannot be processed twice.
+- User must exist before creating sales or processing payouts.
+- Sale must exist before processing payouts or reconciliation.
+- Advance payout can be processed only once for a sale.
+- Final payout is processed only after sale approval.
+- Final payout cannot be processed more than once for the same sale.
+- Rejected sales recover the previously paid advance amount through adjustment payout.
 - A sale can be reconciled only once.
 - Wallet balance must be sufficient before withdrawal.
 - Only one withdrawal is allowed within 24 hours.

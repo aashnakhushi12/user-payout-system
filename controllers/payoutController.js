@@ -146,8 +146,55 @@ const simulateFailedPayout = async (req, res) => {
   }
 };
 
+const getFinalPayout = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const sales = await Sale.find({
+      user: userId,
+      status: { $in: ["APPROVED", "REJECTED"] },
+    });
+
+    if (sales.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No reconciled sales found for this user.",
+      });
+    }
+
+    let approvedSales = 0;
+    let rejectedSales = 0;
+    let finalPayout = 0;
+
+    sales.forEach((sale) => {
+      if (sale.status === "APPROVED") {
+        approvedSales++;
+        finalPayout += sale.amount - sale.advanceAmount;
+      } else if (sale.status === "REJECTED") {
+        rejectedSales++;
+        finalPayout -= sale.advanceAmount;
+      }
+    });
+
+    return res.status(200).json({
+      success: true,
+      userId,
+      approvedSales,
+      rejectedSales,
+      totalReconciledSales: sales.length,
+      finalPayout,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   advancePayout,
   retryFailedPayout,
   simulateFailedPayout,
+  getFinalPayout,
 };

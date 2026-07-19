@@ -68,6 +68,20 @@ user-payout-system
 - Recover advance amount if a sale is rejected
 - Retry failed payouts
 
+### Payout Flow
+
+- When a sale is created, no payout is generated initially.
+
+- After sale approval:
+  - System processes a 10% advance payout to the user's wallet.
+  - Final payout is calculated and added after successful reconciliation.
+
+- If a sale is rejected:
+  - The advance payout amount is recovered from the user's wallet.
+
+- If a payout fails:
+  - The failed payout can be retried using the retry payout API.
+
 ### Withdrawal Management
 
 - Withdraw money from wallet
@@ -149,6 +163,7 @@ The following APIs were developed and tested using Postman.
 | Method | Endpoint                      |
 | ------ | ----------------------------- |
 | POST   | /api/payouts/advance/:saleId  |
+| POST   | /api/payouts/final/:saleId    |
 | POST   | /api/payouts/simulate-failure |
 | PUT    | /api/payouts/retry/:payoutId  |
 
@@ -183,6 +198,7 @@ The following validations are implemented in the project:
 - User existence validation
 - Sale existence validation
 - Duplicate advance payout validation
+- Final payout approval validation
 - Duplicate sale reconciliation validation
 - Wallet balance validation
 - 24-hour withdrawal validation

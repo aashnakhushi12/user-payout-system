@@ -11,7 +11,7 @@ The application stores data in four collections:
 - Payouts
 - Withdrawals
 
-Each collection is designed to store a specific type of information, and ObjectId references are used to connect related data.
+Each collection is designed to store a specific type of information, and MongoDB ObjectId references are used to connect related data.
 
 ---
 
@@ -54,20 +54,27 @@ The Sales collection stores all sale records created by users.
 
 ## Payouts Collection
 
-The Payouts collection stores every payout transaction made by the system.
+The Payouts collection stores all payout transactions created by the system.
 
-| Field         | Type     | Description                  |
-| ------------- | -------- | ---------------------------- |
-| \_id          | ObjectId | Unique payout ID             |
-| user          | ObjectId | Reference to the User        |
-| sale          | ObjectId | Reference to the Sale        |
-| type          | String   | ADVANCE, FINAL or ADJUSTMENT |
-| amount        | Number   | Payout amount                |
-| status        | String   | SUCCESS or FAILED            |
-| remarks       | String   | Description of the payout    |
-| failureReason | String   | Reason if the payout fails   |
-| createdAt     | Date     | Record creation time         |
-| updatedAt     | Date     | Record update time           |
+| Field         | Type     | Description                           |
+| ------------- | -------- | ------------------------------------- |
+| \_id          | ObjectId | Unique payout ID                      |
+| user          | ObjectId | Reference to the User                 |
+| sale          | ObjectId | Reference to the Sale                 |
+| type          | String   | ADVANCE, FINAL or ADJUSTMENT          |
+| amount        | Number   | Payout amount                         |
+| status        | String   | PENDING, SUCCESS or FAILED            |
+| remarks       | String   | Description of the payout transaction |
+| failureReason | String   | Reason if the payout fails            |
+| retryCount    | Number   | Number of retry attempts              |
+| createdAt     | Date     | Record creation time                  |
+| updatedAt     | Date     | Record update time                    |
+
+### Payout Types
+
+- **ADVANCE**: Initial payout of 10% of the sale amount.
+- **FINAL**: Remaining payout processed after sale approval and reconciliation.
+- **ADJUSTMENT**: Recovery amount processed when a sale is rejected.
 
 ---
 
@@ -112,9 +119,12 @@ Relationship summary:
 - One user can have multiple withdrawals.
 - Each payout is linked to one sale.
 - Each sale belongs to one user.
+- Payout records maintain transaction history for advance, final and adjustment payouts.
 
 ---
 
 ## Summary
 
-The database is designed by separating users, sales, payouts and withdrawals into different collections. This keeps the data organized and makes it easier to manage relationships between different modules of the project.
+The database is designed by separating users, sales, payouts and withdrawals into different collections.
+
+This structure keeps the data organized, maintains relationships between different modules and helps track complete payout transactions including advance payouts, final payouts, adjustments and failed payout recovery.
