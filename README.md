@@ -1,58 +1,23 @@
 # User Payout Management System
 
-## Project Overview
+## About the Project
 
-This project is developed using Node.js, Express.js and MongoDB as part of the User Payout Management System assignment.
+I developed this project using JavaScript, Node.js, Express.js and MongoDB as a backend application for managing users, sales, payouts and withdrawals.
 
-The application manages users, sales, payouts and withdrawals based on the business rules provided in the assignment. All APIs have been tested using Postman, and MongoDB is used to store the data.
+The application follows the required business rules for advance payouts, final payouts, withdrawals and failed payout recovery. During development, I organized the project into separate routes, controllers and models to keep the code simple and maintainable.
 
----
-
-## Features
-
-### User Management
-
-- Create a new user
-- View all users
-- View user by ID
-- Update user details
-- Delete a user
-
-### Sales Management
-
-- Create a sale for a user
-- View all sales
-- View sale by ID
-- Prevent duplicate Order IDs
-
-### Payout Management
-
-- Process 10% advance payout
-- Process final payout after sale approval
-- Prevent duplicate advance payout
-- Prevent duplicate reconciliation
-- Recover advance payout when a sale is rejected
-
-### Withdrawal Management
-
-- Request withdrawal from wallet
-- Prevent withdrawal if balance is insufficient
-- Allow only one withdrawal in 24 hours
-
-### Failed Payout Recovery
-
-- Simulate failed payout
-- Retry failed payout
-- Update wallet after successful recovery
+I tested all the APIs using Postman and verified the stored data using MongoDB Compass to ensure that every feature worked correctly.
 
 ---
 
 ## Technologies Used
 
+- JavaScript
 - Node.js
 - Express.js
 - MongoDB
 - Mongoose
+- MongoDB Compass
 - Postman
 - Git & GitHub
 
@@ -60,60 +25,103 @@ The application manages users, sales, payouts and withdrawals based on the busin
 
 ## Project Structure
 
-```
+```text
 user-payout-system
-│
-├── config
-├── controllers
-├── models
-├── routes
-├── .env
-├── app.js
-├── package.json
-├── server.js
-└── README.md
+
+│── config
+│── controllers
+│── docs
+│── models
+│── routes
+│── .env
+│── .gitignore
+│── app.js
+│── server.js
+│── package.json
+│── package-lock.json
+│── README.md
 ```
+
+---
+
+## Features
+
+### User Management
+
+- Create a user
+- View all users
+- View user by ID
+- Update user details
+- Delete a user
+
+### Sales Management
+
+- Create a sale
+- View all sales
+- View sale details
+- Approve or reject a sale
+
+### Payout Management
+
+- Process 10% advance payout
+- Process final payout after sale approval
+- Recover advance amount if a sale is rejected
+- Retry failed payouts
+
+### Withdrawal Management
+
+- Withdraw money from wallet
+- Prevent withdrawal if the wallet balance is insufficient
+- Allow only one withdrawal within 24 hours
 
 ---
 
 ## Installation
 
-### Clone the repository
+Clone the repository
 
 ```bash
 git clone https://github.com/aashnakhushi12/user-payout-system.git
 ```
 
-### Open the project
+Open the project folder
 
 ```bash
 cd user-payout-system
 ```
 
-### Install dependencies
+Install all required packages
 
 ```bash
 npm install
 ```
 
-### Create a .env file
+Create a `.env` file
 
 ```env
 PORT=5000
-MONGO_URI=mongodb://localhost:27017/user-payout-system
+MONGO_URI=mongodb://127.0.0.1:27017/user-payout-system
 ```
 
-### Start the server
+Run the application
 
 ```bash
 npm run dev
+```
+
+The server will start on:
+
+```text
+http://localhost:5000
 ```
 
 ---
 
 ## API Endpoints
 
-### Users
+The following APIs were developed and tested using Postman.
+
+### User APIs
 
 | Method | Endpoint       |
 | ------ | -------------- |
@@ -123,16 +131,20 @@ npm run dev
 | PUT    | /api/users/:id |
 | DELETE | /api/users/:id |
 
-### Sales
+---
+
+### Sale APIs
 
 | Method | Endpoint                     |
 | ------ | ---------------------------- |
 | POST   | /api/sales                   |
 | GET    | /api/sales                   |
 | GET    | /api/sales/:id               |
-| PUT    | /api/sales/:saleId/reconcile |
+| PUT    | /api/sales/reconcile/:saleId |
 
-### Payouts
+---
+
+### Payout APIs
 
 | Method | Endpoint                      |
 | ------ | ----------------------------- |
@@ -140,7 +152,9 @@ npm run dev
 | POST   | /api/payouts/simulate-failure |
 | PUT    | /api/payouts/retry/:payoutId  |
 
-### Withdrawals
+---
+
+### Withdrawal API
 
 | Method | Endpoint         |
 | ------ | ---------------- |
@@ -148,46 +162,64 @@ npm run dev
 
 ---
 
-## Business Rules
+## Business Rules Implemented
 
 - Advance payout is 10% of the sale amount.
 - Final payout is processed only after the sale is approved.
-- If a sale is rejected, the advance payout is adjusted.
-- A sale cannot be reconciled more than once.
+- If a sale is rejected, the advance amount is adjusted.
 - Duplicate Order IDs are not allowed.
-- A user can withdraw only once every 24 hours.
-- Withdrawal is not allowed if the wallet balance is insufficient.
+- A sale cannot be reconciled more than once.
+- Users cannot withdraw more than their wallet balance.
+- Withdrawal is allowed only once every 24 hours.
 - Failed payouts can be retried successfully.
 
 ---
 
-## Validations Implemented
+## Validations
 
-- User validation
-- Sale validation
+The following validations are implemented in the project:
+
 - Duplicate Order ID validation
+- User existence validation
+- Sale existence validation
 - Duplicate advance payout validation
-- Duplicate reconciliation validation
+- Duplicate sale reconciliation validation
 - Wallet balance validation
-- Withdrawal cooldown validation
+- 24-hour withdrawal validation
 - Failed payout retry validation
 
 ---
 
 ## Testing
 
-All APIs were tested using Postman. MongoDB Compass was used to verify the data stored in the database after every API request.
+I tested all APIs using Postman.
+
+After every API request, I checked the MongoDB database using MongoDB Compass to make sure that the data was stored and updated correctly.
+
+---
+
+## Documentation
+
+Additional project documents are available in the **docs** folder.
+
+- Low Level Design (LLD)
+- Database Schema
+- API Documentation
+- Design Decisions
+- Edge Cases
 
 ---
 
 ## Future Improvements
 
+If I continue working on this project, I would like to add:
+
 - JWT Authentication
-- Role-based access
-- Transaction support
-- Pagination and filtering
-- Unit testing
-- API documentation using Swagger
+- Role-based Authorization
+- Pagination
+- Search and Filtering
+- Swagger API Documentation
+- Unit Testing
 
 ---
 
@@ -195,4 +227,6 @@ All APIs were tested using Postman. MongoDB Compass was used to verify the data 
 
 **Khushi Ashna**
 
-GitHub: https://github.com/aashnakhushi12/user-payout-system
+GitHub Repository:
+
+https://github.com/aashnakhushi12/user-payout-system
